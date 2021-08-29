@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
-    siteUrl: "https://www.yourdomain.tld",
-    title: "Julio Bitencourt's Blog",
+    siteUrl: "https://juliobitencourt.dev",
+    title: "Julio Bitencourt - Web Developer",
   },
   plugins: [
     "gatsby-plugin-postcss",
@@ -22,24 +22,53 @@ module.exports = {
       },
     },
     "gatsby-transformer-remark",
+    {
+      resolve: `gatsby-transformer-remark`,
+      options: {
+        plugins: [
+          {
+            resolve: `gatsby-remark-highlight-code`,
+            options: {
+              terminal: "carbon",
+              theme: "blackboard",
+              lineNumbers: true,
+            },
+          },
+        ],
+      },
+    },
     "gatsby-plugin-mdx",
+    {
+      resolve: `gatsby-plugin-mdx`,
+      options: {
+        extensions: [".mdx", ".md"],
+        gatsbyRemarkPlugins: [
+          {
+            resolve: `gatsby-remark-highlight-code`,
+            options: {
+              terminal: "carbon",
+              theme: "blackboard",
+              lineNumbers: true,
+            },
+          },
+        ],
+      },
+    },
     "gatsby-plugin-sharp",
     "gatsby-transformer-sharp",
     {
       resolve: "gatsby-source-filesystem",
       options: {
-        name: "images",
-        path: "./src/images/",
+        name: "blog",
+        path: "./blog",
+        ignore: [`**/\.*`], // ignore files starting with a dot
       },
-      __key: "images",
     },
     {
-      resolve: "gatsby-source-filesystem",
+      resolve: `gatsby-plugin-disqus`,
       options: {
-        name: "pages",
-        path: "./src/pages/",
-      },
-      __key: "pages",
+        shortname: `your-disqus-shortname`
+      }
     },
   ],
 };

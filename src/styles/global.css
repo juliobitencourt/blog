@@ -1,3 +1,43 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+article {
+    @apply max-w-prose mx-auto
+}
+
+h1 {
+    @apply mt-10 text-3xl text-gray-800 font-serif leading-tight;
+}
+
+article > h2 {
+  @apply mt-10 text-2xl text-gray-800 font-serif leading-tight;
+}
+
+article > h3 {
+  @apply mt-8 text-xl text-gray-800 font-serif  ;
+}
+
+article > ul {
+  @apply list-disc ml-12;
+}
+
+article > p {
+  @apply py-3;
+}
+
+article > div {
+  @apply my-6;
+}
+
+article > pre {
+  @apply my-6;
+}
+
+article blockquote p {
+  @apply py-5 px-3 font-serif italic text-gray-900 text-2xl;
+}
+
+article a {
+  @apply underline;
+}
