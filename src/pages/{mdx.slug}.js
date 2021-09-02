@@ -8,11 +8,16 @@ import { defineCustomElements as deckDeckGoHighlightElement } from "@deckdeckgo/
 deckDeckGoHighlightElement();
 
 const BlogPost = ({ data }) => {
+  const image = data.mdx.frontmatter.image
+    ? data.mdx.frontmatter.image.childImageSharp.resize
+    : null
+
   return (
     <Layout pageTitle={data.mdx.frontmatter.title}>
       <SEO
         title={data.mdx.frontmatter.title}
         description={data.mdx.frontmatter.description}
+        image={image}
       />
       <article>
         <p>{data.mdx.frontmatter.date}</p>
@@ -31,6 +36,15 @@ export const query = graphql`
         title
         date(formatString: "MMMM D, YYYY")
         description
+        image: featured {
+          childImageSharp {
+            resize(width: 1200) {
+              src
+              height
+              width
+            }
+          }
+        }
       }
       body
     }

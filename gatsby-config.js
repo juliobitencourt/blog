@@ -5,7 +5,6 @@ module.exports = {
     description: "Julio Bitencourt - Web Developer",
     keywords: ["PHP", "Laravel", "JavaScript", "Cloud Computing"],
     author: "Julio Bitencourt",
-    featured: "images/icon.png",
     canonical: "juliobitencourt.dev",
   },
   plugins: [
