@@ -1,11 +1,13 @@
 import * as React from 'react'
 import Layout from '../components/layout'
+import SEO from "../components/seo"
 import { StaticImage } from 'gatsby-plugin-image'
 import { Link, graphql } from 'gatsby'
 
 const IndexPage = ({ data }) => {
   return (
     <Layout pageTitle="Hi I'm Julio Bitencourt, web developer from Brazil">
+      <SEO title="My Amazing Gatsby App" />
       <div class="max-w-prose mx-auto mt-12">
         <h2 class="text-2xl font-bold text-indigo-700">My Writings</h2>
       </div>
