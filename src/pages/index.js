@@ -5,11 +5,12 @@ import { StaticImage } from 'gatsby-plugin-image'
 import { Link, graphql } from 'gatsby'
 
 const IndexPage = ({ data }) => {
+  console.log(data)
   return (
     <Layout pageTitle="Hi I'm Julio Bitencourt, web developer from Brazil">
-      <SEO title="My Amazing Gatsby App" />
-      <div class="max-w-prose mx-auto mt-12">
-        <h2 class="text-2xl font-bold text-indigo-700">My Writings</h2>
+      <SEO title={data.site.siteMetadata.title} />
+      <div className="max-w-prose mx-auto mt-12">
+        <h2 className="text-2xl font-bold text-indigo-700">My Writings</h2>
       </div>
       {
         data.allMdx.nodes.map(node => (
@@ -29,6 +30,11 @@ const IndexPage = ({ data }) => {
 
 export const query = graphql`
   query {
+    site {
+      siteMetadata {
+        title
+      }
+    },
     allMdx(sort: {fields: frontmatter___date, order: DESC}) {
       nodes {
         frontmatter {

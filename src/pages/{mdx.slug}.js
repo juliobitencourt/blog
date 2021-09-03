@@ -3,6 +3,7 @@ import { graphql } from 'gatsby'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
 import Layout from '../components/layout'
 import SEO from "../components/seo"
+import ShareButtons from "../components/share"
 // import { Disqus, CommentCount } from 'gatsby-plugin-disqus';
 import { defineCustomElements as deckDeckGoHighlightElement } from "@deckdeckgo/highlight-code/dist/loader";
 deckDeckGoHighlightElement();
@@ -31,6 +32,11 @@ const BlogPost = ({ data }) => {
 
 export const query = graphql`
   query ($id: String) {
+    site {
+      siteMetadata {
+        title
+      }
+    },
     mdx(id: {eq: $id}) {
       frontmatter {
         title
