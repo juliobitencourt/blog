@@ -1,0 +1,213 @@
+---
+title: "Como criar um servidor Ubuntu, PHP e Nginx na AWS"
+description: "Aprenda como provisionar um servidor Ubuntu 20.4 com PHP 7.4 e NGINX na AWS nesse tutorial prático!"
+date: "2020-11-25 14:55:47"
+featured: images/thumbnail-como-criar-um-servidor-ubuntu-php-e-nginx-na-aws.png
+---
+
+Como criar um servidor Ubuntu, PHP e Nginx na AWS
+Provisionamento de infraestrutura é uma das tarefas mais comuns quando começamos a trabalhar com DevOps.
+
+Você pode automatizar todo este processo com ferramentas como Ansible, Terraform ou similares, ou ainda, rodar todos esses serviços em containers Docker.
+
+Mas eu acredito que criar esta configuração de forma manual é muito importante para que você saiba o que será automatizado e posteriormente passe a utilizar algumas das ferramentas citadas acima.
+
+## Como criar uma nova instância na AWS para a nossa stack de desenvolvimento PHP
+
+Se você ainda não usa AWS, é possível criar uma conta com 12 meses grátis para a utilização de muitos recursos, dentro de um limite. Fique atento ao limite de utilização gratuita de cada serviço, para não ter surpresas com a conta no final do mês!
+
+Criar uma instância no serviço EC2 da AWS não é difícil.
+
+Vamos escolher uma imagem dentre as várias disponíveis. Para este artigo usaremos a imagem Ubuntu 20.04 (Focal) LTS.
+
+Menu Bitbucket
+
+
+Em seguida definimos o tipo da instância. No nosso caso usaremos uma instância elegível para utilização na camada gratuita.
+
+Menu Bitbucket
+
+
+
+Esta configuração conta com 1GB de memória RAM, o que é suficiente para um servidor básico.
+
+Na configuração de grupos de segurança, criamos um novo grupo com acesso nas portas 80 para tráfego HTTP e 22 para acesso SSH a partir do seu computador local.
+
+Menu Bitbucket
+
+
+Por último vamos criar ou selecionar um par de chaves de acesso. Este par de chaves funciona da seguinte forma: uma chave pública fica armazenada na AWS e uma chave privada fica armazenada no seu computador através de um arquivo com a extensão **pem**.
+
+Este passo é muito importante. Caso você perca o acesso à chave privada no seu computador o servidor poderá ficar inacessível. Veremos a frente como configurar o acesso ao servidor de uma forma mais adequada.
+
+Menu Bitbucket
+
+
+Clique em "Lauch Instances" a aguarde a criação da instância.
+
+## Acessando o servidor via SSH com a chave privada
+
+Acesse a lista de instâncias no painel da AWS e clique com o botão direito sobre a que foi criada no passo 1. Em seguida clique em Connect.
+
+Menu Bitbucket
+
+
+As instruções de conexão serão exibidas. Perceba que você precisará atribuir permissões específicas para a chave privada através do comando _chmod_ mostrado abaixo.
+
+Menu Bitbucket
+
+
+Obs. Você deverá substituir o endereço do servidor pelo endereço que estiver sendo exibido no seu ambiente na AWS.
+
+Atribua as permissões corretas conforme instruções da AWS.
+
+$ chmod 400 SuaChave.pem
+
+
+Após atribuir a permissão correta, digite comando abaixo para se conectar ao servidor.
+
+$ ssh -i "SuaChave.pem" [ubuntu@ec2-X-XXX-XXX-XXX.compute-1.amazonaws.com](mailto:ubuntu@ec2-X-XXX-XXX-XXX.compute-1.amazonaws.com)
+
+
+Se tudo deu certo agora você está acessando o terminal da instância Ubuntu 20.04 na AWS.
+
+Para se certificar que está na versão correta digite
+
+$ cat /etc/os-release
+
+
+Você deverá ver a seguinte saída no terminal.
+
+Menu Bitbucket
+
+
+## Configurando um usuário administrador
+
+Criando o usuário que será utilizado no dia a dia dentro do servidor
+
+$ sudo adduser nomedousuario
+
+
+
+Adding user `nomedousuario ...
+
+Adding new group `nomedousuario (1001) ...
+
+Adding new user `nomedousuario (1001) with group `nomedousuario ...
+
+Creating home directory `/home/nomedousuario ...
+
+Copying files from `/etc/skel' ...
+
+New password:
+
+Retype new password:
+
+passwd: password updated successfully
+
+Changing the user information for nomedousuario
+
+Enter the new value, or press ENTER for the default
+
+	Full Name []:
+
+	Room Number []:
+
+	Work Phone []:
+
+	Home Phone []:
+
+	Other []:
+
+Is the information correct? [Y/n] Y
+
+
+
+Troque o usuário para o que acabou de ser criado
+
+$ sudo su nomedousuario
+
+$ cd ~/
+
+$ pwd
+
+
+
+Veja a saída **/home/nomedousuario**
+
+Configurando o acesso SSH para o novo usuário
+
+Crie um novo par de chaves no seu computador local
+
+$ ssh-keygen -o -a 100 -t ed25519 -f id_aws -C "nomedousuario"
+
+
+
+Obs. [https://blog.g3rt.nl/upgrade-your-ssh-keys.html](https://blog.g3rt.nl/upgrade-your-ssh-keys.html)
+
+Copie a chave pública para sua área de transferência, ela será adicionada ao servidor para o acesso SSH posteriormente
+
+$ cat ~/.ssh/id_aws.pub | pbcopy
+
+
+
+No servidor na AWS, logado como o seu novo usuário crie a pasta .ssh na pasta raíz.
+
+$ cd ~
+
+
+
+$ mkdir .ssh
+
+
+
+Agora crie o arquivo authorized_keys e cole a chave pública criada no passo anterior.
+
+$ vi ~/.ssh/authorized_keys
+
+
+
+Após executar este processo saia do usuário **nomedousuario** digitando **exit** e em seguida saia do servidor digitando **exit** novamente.
+
+Agora vamos fazer o logon no servidor novamente, mas desta vez com a chave privada criada para o usuário.
+
+$ ssh -i ~/.ssh/id_aws -o "IdentitiesOnly=yes" nomedousuario@ec2-X-XXX-XXX-XXX.compute-1.amazonaws.com
+
+
+
+### Adicionando o usuário ao grupo de administradores.
+
+$ usermod -aG admin **nomedousuario**
+
+
+
+## Instalando o NGINX
+
+$ sudo apt update
+
+$ sudo apt install nginx
+
+
+
+Se você acessar o IP público do servidor através do browser a página padrão de boas vindas do NGINX será exibida.
+
+Menu Bitbucket
+
+
+## Instalando o PHP 7.4
+
+$ sudo apt-get install -y php php-cli php-fpm
+
+$ sudo apt-get install -y openssl php-common php-curl php-sqlite3 php-mysql php-json php-mbstring php-xml php-zip
+
+
+
+## Instalando o composer
+
+$ sudo su
+
+$ curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+
+
+Então é isso. Este artigo não cobriu alguns pontos importantes como configurações de segurança e configurações do NGINX para servir sites no servidor. Caso você se interesse por esses assuntos, deixe um comentário para que eu possa aborda-los no futuro

@@ -1,0 +1,346 @@
+---
+title: "Integração Contínua com Laravel e Bitbucket Pipelines"
+description: "Trabalhe de forma mais efetiva e com menos erros através da Integração Contínua. Neste tutorial veremos como implementar CI com Laravel e Bitbucket Pipelines"
+date: "2020-03-18 17:49:03"
+featured: images/thumbnail-integracao-continua-com-laravel-e-bitbucket-pipelines.png
+---
+
+Integração Contínua com Laravel e Bitbucket Pipelines
+Integração contínua é uma prática muito difundida na indústria de desenvolvimento de software.
+
+E hoje você vai aprender uma forma de fazer a **integração contínua em projetos Laravel** com o Bitbucket Pipelines.
+
+O Bitbucket Pipelines é a ferramenta de integração e deployment contínuo da plataforma cloud de Git Bitbucket.
+
+No plano gratuito da ferramenta você conta com 50 minutos de build, que é o tempo gasto para execução dos processos de integração contínua. Ou seja, você pode começar a usar esta ferramenta muito útil agora mesmo.
+
+Para executar este tutorial você vai precisar do entendimento básico de:
+
+- Git
+- Terminal (Linux, Windows ou Mac)
+- Laravel
+
+## Então vamos ver como fazer a integração contínua com Laravel
+
+Após criar uma conta no Bitbucket, crie um novo repositório. Para este tutorial vamos chamá-lo de **laravel-pipeline**.
+
+Menu Bitbucket
+
+
+Novo Repositório
+
+
+Após a criação do repositório no bitbucket faça o clone em seu ambiente de desenvolvimento.
+
+$ git clone git@bitbucket.org:seu-usuario-no-bitbucket/laravel-pipeline.git
+
+
+
+Acesse a pasta do repositório, adicione o remote e envie a branch master para o Bitbucket.
+
+$ cd laravel-pipeline
+
+$ git remote add origin git@bitbucket.org:seu-usuario-no-bitbucket/laravel-pipeline.git
+
+$ git push -u origin master
+
+
+
+## Instalando o Laravel - Neste tutorial estamos usando a versão 7.x
+
+O Laravel pode ser instalado de [duas formas](https://laravel.com/docs/7.x#installing-laravel). Vamos usar a instalação via Laravel Installer.
+
+Ainda na pasta laravel-pipeline digite.
+
+$ laravel new
+
+
+Após a instalação do Laravel execute os testes automatizados que estão inclusos na instalação padrão.
+
+Para isto basta digitar no terminal:
+
+$ artisan test
+
+
+Artisan Test
+
+
+Agora vamos fazer um commit inicial e enviar o código para o repositório no Bitbucket
+
+$ git add .
+
+$ git commit -m "Instalando o Laravel"
+
+$ git push
+
+
+Pronto. Nosso código já está no Bitbucket e agora podemos começar a configurar o pipeline.
+
+## Configurando o repositório para integração contínua no Bitbucket Pipelines
+
+Acesse as configurações do repositório e depois as configurações do Pipeline.
+
+Pipelines Settings
+
+
+Em seguida ative o Pipeline.
+
+Habilitando Pipelines Settings
+
+
+Perceba na imagem acima que agora precisamos configurar o arquivo **bitbucket-pipelines.yml**
+
+## Arquivos de configuração do Bitbucket Pipelines
+
+Precisamos configurar dois arquivos no Bitbucket: o **bitbucket-pipelines.yml** e o **.env.pipelines**.
+
+### O arquivo bitbucket-pipelines.yml
+
+Templates
+
+
+O Bitbucket provê vários templates de configuração para os mais diversos ambientes de desenvolvimento.
+
+Você pode consultar as várias opções para entender como funcionam. Mas neste tutorial vamos criar o arquivo manualmente para praticarmos bem.
+
+No seu editor preferido crie o arquivo **bitbucket-pipelines.yml** na raiz do projeto ou seja, na pasta **laravel-pipeline**.
+
+O bitbucket-pipelines.yml, como a extensão já mostra, é um [arquivo YAML](https://yaml.org/). Você não precisa de muita experiência neste tipo de arquivo neste momento pois ele é bem simples de entender.
+
+image: php:7.4-fpm
+
+
+
+pipelines:
+
+  default:
+
+    - step:
+
+        name: Build and test
+
+        caches:
+
+          - composer
+
+        script:
+
+          - apt-get update && apt-get install -qy git curl libmcrypt-dev mariadb-client ghostscript
+
+          - yes | pecl install mcrypt-1.0.3
+
+          - docker-php-ext-install pdo_mysql bcmath exif
+
+          - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+          - composer install
+
+          - ln -f -s .env.pipelines .env
+
+          - php artisan migrate
+
+          - ./vendor/bin/phpunit
+
+        services:
+
+          - mysql
+
+          - redis
+
+definitions:
+
+  services:
+
+    mysql:
+
+      image: mysql:5.7
+
+      environment:
+
+        MYSQL_DATABASE: 'laravel-pipeline'
+
+        MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+
+        MYSQL_USER: 'homestead'
+
+        MYSQL_PASSWORD: 'secret'
+
+    redis:
+
+      image: redis
+
+
+### Entendendo o arquivo bitbucket-pipelines.yml
+
+O Bitbucket Pipelines utiliza **containers Docker** para executar as etapas. O arquivo bitbucket-pipelines.yml é o principal arquivo de configuração deste fluxo automatizado.
+
+Já na primeira linha do arquivo vemos que vamos utilizar uma **imagem docker para PHP 7.4 com o PHP-FPM configurado**.
+
+image: php:7.4-fpm
+
+
+Em nosso arquivo de exemplo temos duas seções principais: **pipelines** e **definitions**. Vamos começar pela **pipelines**.
+
+Esta seção define quais pipelines estão definidos para este repositório. O **default** será executado para todos os branchs.
+
+Cada **- step** é um passo isolado no fluxo. Os passos podem trocar _estado_ entre si, mas esta configuração está fora do escopo neste tutorial.
+
+No step definimos: **name, caches, script e services**.
+
+- **name** - é o nome que será exibido na interface de execução do pipeline.
+- **caches** - configuramos o cache do composer para que as execuções seguintes do pipeline sejam mais rápidas
+- **scripts** - é onde a mágica acontece. Vou explicar melhor adiante.
+- **services** - são os serviços necessários para a utilização do pipeline. Neste caso o MySQL e o Redis. Os services serão explicados adiante neste tutorial.
+
+Lembrando que esta é uma configuração básica e é possível fazer muito mais com o Bitbucket Pipelines. Inclusive deployment automático, como veremos em um arquivo futuro.
+
+Sugiro que consultem a documentação no site oficial.
+
+### Executando os scripts no container Docker
+
+Primeiro atualizamos os pacotes da imagem Docker e instalamos alguns os pacotes **git, curl, libmcrypt-dev, mariadb-client, ghostscript e mcrypt**
+
+- apt-get update && apt-get install -qy git curl libmcrypt-dev mariadb-client ghostscript
+
+- yes | pecl install mcrypt-1.0.3
+
+
+Agora utilizamos a ferramenta **docker-php-ext-install** para instalar as extensões **pdo_mysql, bcmath e exif** que são necessárias para esta versão do Laravel.
+
+- docker-php-ext-install pdo_mysql bcmath exif
+
+
+Em seguida utilizamos o **curl** para baixar o composer e instalamos as dependências do nosso projeto Laravel com o comando **composer install**
+
+- curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+- composer install
+
+
+E por último mas não menos importante, criamos um link simbólico entre o .env.pipelines e o .env padrão que será utilizado pelo Laravel durante a execução dos testes automatizados.
+
+Depois rodamos as migrações e a suíte de testes.
+
+- ln -f -s .env.pipelines .env
+
+- php artisan migrate
+
+- ./vendor/bin/phpunit
+
+
+### Definindo os serviços que serão instalados através de containers Docker
+
+definitions:
+
+  services:
+
+    mysql:
+
+      image: mysql:5.7
+
+      environment:
+
+        MYSQL_DATABASE: 'laravel-pipeline'
+
+        MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+
+        MYSQL_USER: 'homestead'
+
+        MYSQL_PASSWORD: 'secret'
+
+    redis:
+
+      image: redis
+
+
+
+Com o arquivo bitbucket-pipelines.yml configurado só falta agora configurar um arquivo acessório com as variáveis de ambiente que serão utilizadas pelo serviço durante a execução dos passos
+
+### O arquivo .env.pipelines
+
+APP_ENV=local
+
+APP_KEY=ThisIsThe32CharacterKeySecureKey
+
+APP_DEBUG=true
+
+DB_CONNECTION=mysql
+
+DB_HOST=127.0.0.1
+
+DB_DATABASE=laravel-pipeline
+
+DB_USERNAME=homestead
+
+DB_PASSWORD=secret
+
+
+Este arquivo define as variáveis de ambiente que serão utilizadas especificamente para a execução do pipeline.
+
+Git Status
+
+
+$ git add .
+
+$ git commit -m "Configurando o Bitbucket Pipelines"
+
+$ git push
+
+
+A partir do momento em que o código é enviado para o repositório o Bitbucket Pipelines vai identificar esta ação e iniciar o processo de build.
+
+Ao acessar o menu Pipelines você verá que o pipeline está sendo executado para o commit que criamos anteriormente. Neste caso o "Configurando o Bitbucket Pipelines".
+
+Menu Pipelines
+
+
+Pipelines Screen
+
+
+Clique no status do pipeline e você verá a tela com todos os passos sendo executados.
+
+Menu Pipelines
+
+
+Se tudo deu certo, a build vai ficar na cor verde
+
+Build com sucesso
+
+
+Tela dos Pipelines
+
+
+## Agora que tal inserir um erro em nosso código e envia-lo para o repositório?
+
+Vamos forçar um erro em nosso teste automatizado.
+
+Abra o arquivo ExampleTest.php localizado no diretório tests/Unit e altere a linha 16 conforme abaixo.
+
+$this->assertTrue(false);
+
+
+Agora faça o commit e envie para o repositório.
+
+$ git add .
+
+$ git commit -m "Minha funcionalidade incrível"
+
+$ git push
+
+
+Após alguns instantes o pipeline será executado automaticamente e ao executar a suíte de testes vai falhar.
+
+Build falha
+
+
+Confira a saída do PHP Unit.
+
+Build falha
+
+
+## Conclusão
+
+Neste artigo vimos que com um pouco de configuração inicial poderemos poupar um tempo enorme em localização e correção de erros no futuro.
+
+Se você encontrou algum problema ou tem alguma sugestão por favor deixe um comentário e se possível compartilhe este artigo com seus amigos e amigas devs!
+

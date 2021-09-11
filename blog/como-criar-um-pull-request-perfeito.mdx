@@ -1,0 +1,122 @@
+---
+title: "Como criar um Pull Request perfeito"
+description: "Escrever um bom pull request pode aumentar muito a produtividade do seu time. Descubra como criar o pull request perfeito neste artigo!"
+date: "2020-05-19 10:27:54"
+featured: images/thumbnail-como-criar-um-pull-request-perfeito.png
+---
+
+Como criar um Pull Request perfeito
+Grande parte do tempo em que trabalhamos de forma colaborativa estamos na verdade gastando nosso tempo com comunicação. Seja via chat, e-mail, telefone ou as famigeradas reuniões.
+
+Se você já leu o [manifesto ágil](https://agilemanifesto.org/iso/ptbr/manifesto.html) deve se lembrar:
+
+> Indivíduos e interações mais que processos e ferramentas
+
+E ao contrário do que é dito popular: você é responsável pelo diz e de forma direta ou indireta; pelo que a outra parte entende.
+
+Um **pull request** (ou merge request se você usa Gitlab) nada mais é do que uma declaração, uma mensagem ao seu time de que você terminou uma etapa do trabalho e precisa levar este trabalho adiante.
+
+Ou seja: **comunicação**.
+
+>Code Review is the practice of having other peers reviewing source code changes before it gets introduced into a baseline. Developers usually review their team members' code, although there are companies that promote cross-team reviews.
+
+[https://sourcelevel.io/everything-about-code-review-from-peer-review-to-automated-code-review](https://sourcelevel.io/everything-about-code-review-from-peer-review-to-automated-code-review)
+
+Esta é a importância de um pull request bem feito.
+
+Neste artigo veremos algumas dicas para criar pull requests que sejam realmente revisados e cumpram seu papel de gerar valor ao negócio; com código conciso, legível e testável.
+
+## Como escrever uma boa mensagem de commit?
+
+A importância da comunicação eficiente que caracteriza um bom pull request começa antes da criação do mesmo no Github, Gitlab, Bitbucket e similares.
+
+É imprescindível que você escreva boas mensagens nos seus commits. Elas devem especificar exatamente o que foi feito e qual problema foi resolvido.
+
+Novamente a dica óbvia dada acima: escreva bons commits. Não seja aquela pessoa que gera um commit com uma mensagem "WIP" e envia para o repositório remoto. Você não faz isso né? :P
+
+### Ensinar Git está fora do contexto deste artigo. Mas seguem algumas dicas
+
+* Evite o **git add -a**. Adicione apenas os arquivos que foram criados/alterados para aquela funcionalidade específica
+* Faça commits pequenos
+* Revise as mensagens antes de fazer o _push_, ou seja, enviar a branch para o repositório remoto
+* Se necessário reescreva as mensagens. Para isto use comandos como **git rebase -i** e **amend**.
+* Aprenda a usar o **git squash** e agrupe commits que se encaixem em um mesmo contexto ou tenham sido alterações repetitivas em um mesmo trecho de código
+
+Se você é um líder técnico combine as regras com o seu time, documente estas regras em um _guideline_ e o mais importante: **recuse pull requests que não as sigam.**
+
+## Explique o propósito do pull request através do contexto de negócio
+
+Agora se coloque no lugar daqueles que receberão a nobre tarefa de revisar o seu código. Tenha em mente que estas pessoas poderão estar em um contexto totalmente diferente daquele no qual você está quando abrir o pull request. Isto pode acontecer mesmo que os revisores e as revisoras estejam no mesmo projeto e no mesmo time.
+
+Como mencionei acima, é importante se colocar no lugar das pessoas. Indo além, se coloque no lugar do seu "eu" do futuro e se pergunte se a descrição do pull request é clara o suficiente para que você a entenda 6 meses depois.
+
+Explique o contexto de negócio do pull request. Como o problema foi identificado? Qual é o objetivo da funcionalidade?
+
+Forneça informações claras sobre como o revisor pode reproduzir o erro ou testar o código que está sendo revisado e principalmente qual é o resultado esperado e como isto pode gerar valor ao negócio.
+
+## Diminua o tamanho do pull request
+
+O pull request perfeito deve ser pequeno. Se a funcionalidade que está sendo desenvolvida é muito grande ou complexa você poderá centralizar o trabalho em uma feature branch - a depender do fluxo de trabalho do time.
+
+Lembre-se do SRP, ou Single Responsibility Principle e a assim como nos commits, faça pull requests pequenos.
+
+## 5 formas de escrever títulos matadores. A última vai te surpreender!
+
+Viram o bait?
+
+Brincadeiras a parte. Escreva bons e - de preferência - pequenos títulos para seus pull requests.
+
+### Algumas dicas
+
+* Descreva o que foi feito ao invés de como foi feito. A descrição do pull request e o próprio código devem mostrar o _como_
+* Utilize sempre o mesmo _tom_ e tempo verbal
+* Faça uma conexão entre o título do pull request e o contexto de negócio
+
+## A descrição do pull request perfeito
+
+Comece mostrando o contexto do problema/user story que está sendo implementado naquele pull request.
+
+* Utilize checklists e elementos visuais como captura de tela, gifs, snippets de código, etc.
+* Justifique pontos que possam ser controversos e polêmicos.
+* Não quebre janelas. Se o PR introduzir algum débito técnico demonstre o caso e se possível como este débito será pago no futuro
+
+## Automatize tarefas repetitivas
+
+As melhores plataformas do mercado contam com muitas ferramentas de verificação de status, tarefas pendentes e execução correta do pipeline de testes.
+
+Você pode [habilitar verificações de status obrigatórias](https://help.github.com/pt/github/administering-a-repository/enabling-required-status-checks) ou configurar [merge checks](https://confluence.atlassian.com/bitbucketserver/checks-for-merging-pull-requests-776640039.html) no Bitbucket.
+
+Desta forma, uma camada de verificações de integridade será executada automaticamente durante o ciclo de vida do pull request.
+
+### Code Review - Pull request aberto? É hora da revisão
+
+E atenção! Se liga aí, que é hora da revisão! (os xóvens provavelmente não [pegaram a referência](https://www.youtube.com/watch?v=lqikvAgyFzE))
+
+Como na vida, prevenir é melhor que remediar. O custo de descobrir bugs tarde é [muito grande](https://deepsource.io/blog/exponential-cost-of-fixing-bugs/).
+
+### Pontos que devem ser observados com bastante atenção em um pull request
+
+* O código funciona. Este é óbvio, mas já vi muito pull request ser aprovado sem funcionar
+* Os testes estão bem escritos e descrevem claramente o que está sendo testado
+* O design e arquitetura estão bem definidos e em conformidade com as melhores práticas
+* Os guidelines estão sendo seguidos
+* O pull request pode introduzir alguma vulnerabilidade de segurança no código ou através de dependências?
+* A performance do software pode sofrer alguma queda
+
+### Algumas dicas para os revisores
+
+* Escreva comentários tanto na descrição geral do pull request
+* Crie checklists caso encontre múltiplos pontos de melhoria ou esclarecimentos
+* Bom humor é bem vindo! Mas não utilize tom agressivo ou de deboche
+
+### Conclusão
+
+Escrever o pull request perfeito pode ser um pouco trabalhoso no começo. Mas assim como em testes automatizados o investimento se paga no longo prazo! Pode confiar!
+
+#### Referências
+
+* **[https://opensource.com/article/18/6/anatomy-perfect-pull-request](https://opensource.com/article/18/6/anatomy-perfect-pull-request)**
+* **[https://www.atlassian.com/blog/git/written-unwritten-guide-pull-requests](https://www.atlassian.com/blog/git/written-unwritten-guide-pull-requests)**
+* **[https://buttercms.com/blog/5-things-your-team-should-do-to-make-pull-requests-less-painful](https://buttercms.com/blog/5-things-your-team-should-do-to-make-pull-requests-less-painful)**
+* **[https://azevedorafaela.com/2018/04/27/what-is-the-cost-of-a-bug/](https://azevedorafaela.com/2018/04/27/what-is-the-cost-of-a-bug/)**
+* **[https://deepsource.io/blog/exponential-cost-of-fixing-bugs/](https://deepsource.io/blog/exponential-cost-of-fixing-bugs/)**

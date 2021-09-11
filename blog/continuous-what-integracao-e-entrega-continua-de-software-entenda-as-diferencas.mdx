@@ -1,0 +1,124 @@
+---
+title: "Continuous What? Integração e entrega contínua de software: entenda as diferenças"
+description: "Quer saber tudo sobre integração e entrega contínua? Neste artigo eu faço uma explicação completa do CI/CD. Confira!"
+date: "2020-11-18 17:54:37"
+featured: images/thumbnail-continuous-what-integracao-e-entrega-continua-de-software-entenda-as-diferencas.png
+---
+
+Continuous What? Integração e entrega contínua de software: entenda as diferenças
+Você já colocou uma funcionalidade em produção e só depois viu que alguma coisa quebrou? Já ficou com aquela sensação: será que tem algo errado e o meu chefe, ou pior, o cliente do meu chefe só vai perceber quando eu já estiver _sextando_?
+
+Deployment de software pode causar calafrios na maioria das equipes de desenvolvimento.
+
+Mas não precisa ser assim.
+
+## Qual é o problema que a integração contínua resolve?
+
+Nos primórdios - quando a internet era tudo mato - a gente subia tudo por FTP, se conectava com algum _client_ de SQL para alterar o _schema_ do banco de dados na unha, testava quando dava tempo e rezava para que o que funcionava na máquina local continuasse funcionando em produção.
+
+Os tempos mudaram e a complexidade do desenvolvimento de software ganhou vários novos atores.
+
+Neste artigo eu vou apresentar os principais pilares da entrega contínua e com qualidade de software.
+
+### O que vamos abordar
+
+
+* Testes automatizados
+* Integração contínua
+* Entrega contínua e deployments frequentes
+* Estratégias de release
+
+## Testes automatizados
+
+Uma coisa é fato: alguém vai testar seu código!
+
+Não importa se é TDD, se você escreve os testes antes ou depois do código de implementação, se é unitário ou de integração. Alguém vai testar seu software.
+
+Pode ser código testantado código, pode ser você manualmente, pode ser um analista de QA ou pode ser o cliente ?
+
+Testes manuais podem falhar pois humanos falham o tempo todo. Já os testes automatizados são valiosos no longo prazo.
+
+As principais objeções ao uso de testes automatizados é a sensação de perda de tempo. Afinal poderíamos estar escrevendo código “real” ao invés de código que não faz parte das funcionalidades.
+
+Mas vem comigo: quando você precisar preencher aquele formulário de cadastro com 30 campos pela décima vez vai praguejar por não ter escrito um teste automatizado antes.
+
+## O que é a integração contínua?
+
+Se você já ouviu falar em **The Twelve-Factor App** sabe que deveria desenvolver seus sistemas utilizando uma [base de código com rastreabilidade e controle de versão](https://12factor.net/pt_br/codebase).
+
+Integração contínua (ou continuous integration - CI) é a prática de enviar seu código - integrar - para o repositório compartilhado várias vezes durante o processo de desenvolvimento e encontrar e corrigir problemas rapidamente e de forma automática.
+
+Você sabe que problemas de integração são um grande gargalo para a entrega de software e a integração contínua é a ferramenta ideal para aumentar a qualidade e a agilidade diminuindo o retrabalho e o estresse.
+
+Imagine o seguinte cenário: você trabalha durante uma semana inteira em uma funcionalidade e ao término desse árduo período [abre o pull request perfeito](https://juliobitencourt.dev/como-criar-um-pull-request-perfeito) e envia seu código para produção.
+
+Mas antes de ir para produção esse código precisa ser analisado por outros membros da equipe que provavelmente vão executar todo o sistema - e não só a funcionalidade que você fez - em um ambiente de testes.
+
+Neste momento várias inconsistências (bugs mesmo!) são encontradas, pois o código que você escreveu sofre o impacto de funcionalidades escritas por outros desenvolvedores e desenvolvedoras durante o mesmo período e você vai precisar passar algumas horas corrigindo esses problemas.
+
+“A integração contínua não vai te livrar dos _bugs_, mas os torna muito mais fáceis de encontrar e remover.”
+
+— Martin Fowler
+
+Integração contínua é uma prática muito comum nos dias atuais, mesmo assim me deparo com muitos desenvolvedores e desenvolvedoras que não entendem bem como isto funciona e como implementar no ambiente de trabalho.
+
+Basicamente funciona assim.
+
+A cada etapa do desenvolvimento você envia o seu código para o repositório remoto. Isto mesmo que você está pensando: git push.
+
+Neste momento, um serviço automático de integração vai analisar o seu código conforme as regras definidas para criação de uma build.
+
+Exemplos:
+
+* Montagem de um ambiente o mais próximo possível do de produção
+* Criação de um banco de dados de teste
+* Instalação de dependências
+* Execução de testes automatizados.
+* Compilação de binários
+
+Caso alguma coisa falhe em qualquer uma destas etapas você será avisado imediatamente e poderá corrigir o problema.
+
+Exemplo:
+
+[Tutorial: Integração Contínua com Laravel e Bitbucket Pipelines](https://juliobitencourt.dev/integracao-continua-com-laravel-e-bitbucket-pipelines)
+
+Caso esteja tudo certo você continua o desenvolvimento e quando terminar a nova funcionalidade e ou a correção de algum bug seu código poderá avançar no pipeline de entrega contínua como veremos a seguir.
+
+## A Entrega contínua ou Continuous Delivery
+
+Pode confessar: todos nós sentimos um frio na barriga antes de lançar uma nova versão de nossos sites e sistemas.
+
+Esse stress no momento do deployment é natural e pode ser minimizado com a adoção de boas práticas de entrega contínua de software.
+
+"A entrega contínua é a capacidade de colocar mudanças de todos os tipos - incluindo novos recursos, mudanças de configuração, correções de bugs e experimentos - na produção ou nas mãos dos usuários, com segurança e rapidez de forma sustentável."
+— https://continuousdelivery.com/
+
+Dentre as vantagens que podemos destacar na entrega contínua está o fato de que ela acelera o processo de identificação de bugs. Isto é muito importante, pois quanto mais demoramos para encontrar um bug, maior é o custo de correção.
+
+Uma boa prática é a de utilizar deployments atômicos. Que consiste em instalar a nova versão em um ambiente totalmente separado da versão de produção, executar uma sequência de testes automatizados e somente depois que tudo estiver funcionando perfeitamente liberar esta versão para uso dos clientes.
+
+### Confira algumas estratégias de release
+
+* [Canary Release](https://martinfowler.com/bliki/CanaryRelease.html)
+* [Feature Flags ou Feature Toggles](https://martinfowler.com/articles/feature-toggles.html)
+* [Blue Green Deployment](https://martinfowler.com/bliki/BlueGreenDeployment.html)
+
+## Conclusão
+
+Não há nada melhor que terminar uma funcionalidade e saber que foram dados todos os passos para garantir a qualidade final do produto.
+
+Um motivo a menos para alguém nos acordar de madrugada pois o sistema caiu.
+
+Obrigado pela leitura!
+
+### Referências
+
+- [https://12factor.net/]
+- [https://www.thoughtworks.com/pt/continuous-integration](https://www.thoughtworks.com/pt/continuous-integration)
+- [https://spinupwp.com/wordpress-deployment-workflow-preparing/](https://spinupwp.com/wordpress-deployment-workflow-preparing/)
+- [https://buddy.works/guides/laravel-in-docker](https://buddy.works/guides/laravel-in-docker)
+- [https://martinfowler.com/articles/branching-patterns.html#release-ready-mainline](https://martinfowler.com/articles/branching-patterns.html#release-ready-mainline)
+- [https://dev.to/alexbunardzic/benefits-of-frequent-deployments-44ah](https://dev.to/alexbunardzic/benefits-of-frequent-deployments-44ah)
+- [https://devops.com/fighting-deployment-anxiety-5-tips/](https://devops.com/fighting-deployment-anxiety-5-tips/)
+- [https://www.celerity.com/the-true-cost-of-a-software-bug]
+

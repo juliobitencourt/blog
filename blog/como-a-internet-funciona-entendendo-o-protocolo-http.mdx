@@ -1,0 +1,68 @@
+---
+title: "Como a internet funciona? Entendendo o protocolo HTTP"
+description: "Como todo protocolo, o HTTP define regras de comunicação entre dois pontos. Como o seu navegador e um servidor por exemplo."
+date: "2021-02-01 13:51:44"
+featured: images/thumbnail-como-a-internet-funciona-entendendo-o-protocolo-http.jpg
+---
+
+Como a internet funciona? Entendendo o protocolo HTTP
+O HTTP é um protocolo.
+
+Como todo protocolo, o HTTP define regras de comunicação entre dois pontos. Como o seu navegador e um servidor por exemplo.
+
+Quando você visita uma página na web você está enviando uma requisição HTTP e toda requisição HTTP deve ter uma resposta.
+
+No trecho abaixo percebam que uma requisição foi feita ao endereço localhost, que neste caso é o servidor web que está sendo executado em minha máquina local apenas para testes. Em exemplos reais você poderia acessar qualquer site da internet através de uma URL pública ou através de autenticação.
+
+No final do artigo eu coloquei duas ferramentas muito úteis para testar requisições HTTP utilizando o Curl consumindo dados no formato JSON.
+
+
+
+Atenção aos trechos **GET**, **HTTP/1.1** e **200 OK**
+
+GET é o método HTTP, onde a requisição diz ao destinatário **localhost** que ela quer pegar uma informação (GET).
+
+![alt text](https://juliobitencourt-dev-assets.s3.amazonaws.com/images/requisicao-http-get.png "Requisição HTTP GET")
+
+**HTTP/1.1** e **200 OK** pertencem à resposta do servidor e mostram a versão do HTTP que está sendo utilizada e o status de retorno. Veja os demais status aqui Right pointing backhand index [https://httpstatuses.com](https://httpstatuses.com)
+
+## O que são os métodos HTTP?
+
+Alguns outros métodos: POST para criar alguma informação, PUT/PATCH para alterar, DELETE para remover, e assim por diante
+
+Usando os métodos, que também são conhecidos como verbos, o servidor pode tomar decisões sobre o que fazer quando um endereço é acessado.
+
+Abaixo as requisições para hipoteticamente retornar os dados de um cliente, alterar os dados do mesmo e a última remove o o cliente.
+
+![alt text](https://juliobitencourt-dev-assets.s3.amazonaws.com/images/requisicao-http-get-2.png "Requisição HTTP GET")
+
+Outros pontos muito importantes de uma requisição HTTP são os cabeçalhos **headers** e o corpo **body**
+
+## Como enviar uma requisição HTTP com cabeçalhos?
+
+Abaixo um exemplo de requisição com um cabeçalho.
+
+![alt text](https://juliobitencourt-dev-assets.s3.amazonaws.com/images/requisicao-http-com-cabecalhos.png "Requisição HTTP passando um cabeçalho (Header)")
+
+## Como enviar uma requisição Post HTTP?
+
+E por último, uma requisição com o método POST para simular um login. Pense em username e password como campos de um formulário HTML.
+
+![alt text](https://juliobitencourt-dev-assets.s3.amazonaws.com/images/requisicao-http-post.png "Requisição HTTP Post")
+
+Para os exemplos eu usei o curl [https://curl.se](https://curl.se) mas você pode usar o Postman para usar uma interface gráfica e brincar com vários tipos de requisições HTTP.
+
+![alt text](https://juliobitencourt-dev-assets.s3.amazonaws.com/images/requisicao-usando-postman.png "Requisição HTTP usando Postman")
+
+## 2 ferramentas muito úteis para testes de requisições HTTP
+
+### {JSON} Placeholder - API fake para testes e criação de protótipos
+
+O [JSON Placeholder](https://jsonplaceholder.typicode.com/) é uma ferramenta bem legal. Com ele você consegue criar um pequeno servidor com conteúdo JSON para testes bem como testar alguns **endpoints** pré definidos.
+
+![alt text](https://juliobitencourt-dev-assets.s3.amazonaws.com/images/requisicao-http-json-placeholder.png "Exemplo Curl utilizando o JSON Placeholder")
+
+## Curl Builder
+[Curl Builder](https://curlbuilder.com/) é outra ferramenta bem legal e também é muito simples de usar. Basta preencher alguns campos como o método HTTP, a URL, adicionar cabeçalhos e pronto: a requisição HTTP via Curl é exibida para você copiar e testar em seu terminal.
+
+![alt text](https://juliobitencourt-dev-assets.s3.amazonaws.com/images/print-curl-builder.png "Exemplo Curl Builder")
