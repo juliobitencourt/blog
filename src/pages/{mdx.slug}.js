@@ -21,6 +21,7 @@ const BlogPost = ({ data }) => {
         image={image}
       />
       <article>
+        <div class="sharethis-inline-share-buttons"></div>
         <p>{data.mdx.frontmatter.date}</p>
         <MDXRenderer>
           {data.mdx.body}
