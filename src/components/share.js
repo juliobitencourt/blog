@@ -1,36 +1,45 @@
-import React from 'react'
+import React from "react";
+import {InlineReactionButtons} from 'sharethis-reactjs';
+import {InlineShareButtons} from 'sharethis-reactjs';
+import {StickyShareButtons} from 'sharethis-reactjs';
+import {InlineFollowButtons} from 'sharethis-reactjs';
 
-import {
-  FacebookShareButton,
-  FacebookIcon,
-  LinkedinShareButton,
-  LinkedinIcon,
-  TwitterShareButton,
-  TwitterIcon,
-  WhatsappShareButton,
-  WhatsappIcon,
-} from 'react-share'
+class Share extends React.Component {
 
-const ShareButtons = ({title, url, twitterHandle, tags}) => {
-    return(
-        <div>
-          <FacebookShareButton url={url} >
-                <FacebookIcon  size={40} round={true}/>
-         </FacebookShareButton>
+  render () {
+    return (
+      <div>
+        <InlineShareButtons
+          config={{
+            alignment: 'left',  // alignment of buttons (left, center, right)
+            color: 'social',      // set the color of buttons (social, white)
+            enabled: true,        // show/hide buttons (true, false)
+            font_size: 12,        // font size for the buttons
+            labels: 'null',        // button labels (cta, counts, null)
+            language: 'en',       // which language to use (see LANGUAGES)
+            networks: [           // which networks to include (see SHARING NETWORKS)
+              'whatsapp',
+              'linkedin',
+              'messenger',
+              'facebook',
+              'twitter'
+            ],
+            padding: 12,          // padding within buttons (INTEGER)
+            radius: 4,            // the corner radius on each button (INTEGER)
+            show_total: true,
+            size: 30,             // the size of each button (INTEGER)
 
-          <TwitterShareButton url={url} title={title} via={twitterHandle} hashtags={tags}>
-                <TwitterIcon  size={40} round={true} />
-          </TwitterShareButton>
+            // OPTIONAL PARAMETERS
+            message: 'custom email text',     // (only for email sharing)
+            subject: 'custom email subject',  // (only for email sharing)
+            username: 'custom twitter handle' // (only for twitter sharing)
+          }}
+        />
 
-          <LinkedinShareButton url={url} >
-            <LinkedinIcon  size={40} round={true}/>
-          </LinkedinShareButton>
+      </div>
+    );
+  }
+};
 
-          <WhatsappShareButton url={url} title={title}>
-               <WhatsappIcon  size={40} round={true}/>
-           </WhatsappShareButton>
-        </div>
-      )
-
-}
-export default ShareButtons
+// export
+export default Share;

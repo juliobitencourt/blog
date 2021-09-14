@@ -19,7 +19,6 @@ const Layout = ({ pageTitle, children }) => {
       <Helmet>
         <meta charSet="utf-8" />
         <title>{pageTitle} | {data.site.siteMetadata.title}</title>
-        <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=5e7d14323fcc6a00121f2595&product=inline-share-buttons&cms=website' async='async'></script>
       </Helmet>
       <div className="container mx-auto max-w-6xl p-6">
         <header className="sticky top-0 bg-white z-10">
