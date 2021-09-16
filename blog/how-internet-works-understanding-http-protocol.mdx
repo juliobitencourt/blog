@@ -1,0 +1,67 @@
+---
+title: "How does the internet work? Understanding the HTTP protocol"
+description: "Como todo protocolo, o HTTP define regras de comunicação entre dois pontos. Como o seu navegador e um servidor por exemplo."
+date: "2021-09-16 14:44:44"
+featured: images/thumbnail-how-internet-works-understanding-http-protocol.jpg
+---
+
+How does the internet work? Understanding the HTTP protocol
+HTTP is a protocol.
+
+Like any protocol, HTTP defines communication rules between two points. Like your browser and a server for example.
+
+When you visit a webpage you are sending an HTTP request and every HTTP request must have a response.
+
+In the excerpt below, notice that a request was made to the localhost address, which in this case is the web server being run on my local machine just for testing. In real examples you could access any internet site via a public URL or via authentication.
+
+At the end of the article I put together two very useful tools to test HTTP requests using Curl consuming data in JSON format.
+
+
+Atenção aos trechos **GET**, **HTTP/1.1** e **200 OK**
+
+GET é o método HTTP, onde a requisição diz ao destinatário **localhost** que ela quer pegar uma informação (GET).
+
+![alt text](https://juliobitencourt-dev-assets.s3.amazonaws.com/images/requisicao-http-get.png "Requisição HTTP GET")
+
+**HTTP/1.1** e **200 OK** pertencem à resposta do servidor e mostram a versão do HTTP que está sendo utilizada e o status de retorno. Veja os demais status aqui Right pointing backhand index [https://httpstatuses.com](https://httpstatuses.com)
+
+## O que são os métodos HTTP?
+
+Some other methods: POST to create some information, PUT/PATCH to change, DELETE to remove, and so on.
+
+Using methods, which are also known as verbs, the server can make decisions about what to do when an address is accessed.
+
+Below are the requests to hypothetically return a customer's data, change the customer's data and the last one removes the customer.
+
+![alt text](https://juliobitencourt-dev-assets.s3.amazonaws.com/images/requisicao-http-get-2.png "Requisição HTTP GET")
+
+Other very important points of an HTTP request are the **headers** and the **body**
+
+## How to send an HTTP request with headers?
+
+Below is an example of a request with a header.
+
+![alt text](https://juliobitencourt-dev-assets.s3.amazonaws.com/images/requisicao-http-com-cabecalhos.png "HTTP request passing a header")
+
+## How to send an HTTP Post request?
+
+And finally, a request with the POST method to simulate a login. Think of username and password as fields on an HTML form.
+
+![alt text](https://juliobitencourt-dev-assets.s3.amazonaws.com/images/requisicao-http-post.png "HTTP Post request")
+
+For the examples I used curl [https://curl.se](https://curl.se) but you can use Postman to use a graphical interface and play around with various types of HTTP requests.
+
+![alt text](https://juliobitencourt-dev-assets.s3.amazonaws.com/images/requisicao-usando-postman.png "HTTP request using Postman")
+
+## Two useful tools for testing HTTP requests
+
+### {JSON} Placeholder - API fake for testing and prototyping
+
+[JSON Placeholder](https://jsonplaceholder.typicode.com/) it's a really cool tool. With it you can create a small server with JSON content for testing as well as test some predefined **endpoints**.
+
+![alt text](https://juliobitencourt-dev-assets.s3.amazonaws.com/images/requisicao-http-json-placeholder.png "Curl example using JSON Placeholder")
+
+## Curl Builder
+[Curl Builder](https://curlbuilder.com/) it's another really cool tool and it's also very simple to use. Just fill in some fields such as the HTTP method, the URL, add headers and that's it: the HTTP request via Curl is displayed for you to copy and test in your terminal.
+
+![alt text](https://juliobitencourt-dev-assets.s3.amazonaws.com/images/print-curl-builder.png "Curl Builder example")
