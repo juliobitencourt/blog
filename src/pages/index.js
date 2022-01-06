@@ -5,7 +5,6 @@ import { StaticImage } from 'gatsby-plugin-image'
 import { Link, graphql } from 'gatsby'
 
 const IndexPage = ({ data }) => {
-  console.log(data)
   return (
     <Layout pageTitle="Hi I'm Julio Bitencourt, web developer from Brazil">
       <SEO title={data.site.siteMetadata.title} />

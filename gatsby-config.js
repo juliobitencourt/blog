@@ -8,6 +8,7 @@ module.exports = {
     canonical: "juliobitencourt.dev",
   },
   plugins: [
+    "gatsby-plugin-transition-link",
     "gatsby-plugin-postcss",
     "gatsby-plugin-gatsby-cloud",
     "gatsby-plugin-image",

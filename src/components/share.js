@@ -3,9 +3,9 @@ import {InlineReactionButtons} from 'sharethis-reactjs';
 import {InlineShareButtons} from 'sharethis-reactjs';
 import {StickyShareButtons} from 'sharethis-reactjs';
 import {InlineFollowButtons} from 'sharethis-reactjs';
+import { useStaticQuery, graphql } from "gatsby"
 
 class Share extends React.Component {
-
   render () {
     return (
       <div>

@@ -38,7 +38,7 @@ const Layout = ({ pageTitle, children }) => {
         </header>
         <main className="py-3">
             <div className="mx-auto max-w-prose">
-                <h1>{pageTitle}</h1>
+                <h1 className="text-6xl">{pageTitle}</h1>
             </div>
             {children}
         </main>
