@@ -60,20 +60,23 @@ Obs. Você deverá substituir o endereço do servidor pelo endereço que estiver
 
 Atribua as permissões corretas conforme instruções da AWS.
 
+```shell
 $ chmod 400 SuaChave.pem
-
+```
 
 Após atribuir a permissão correta, digite comando abaixo para se conectar ao servidor.
 
+```shell
 $ ssh -i "SuaChave.pem" [ubuntu@ec2-X-XXX-XXX-XXX.compute-1.amazonaws.com](mailto:ubuntu@ec2-X-XXX-XXX-XXX.compute-1.amazonaws.com)
-
+```
 
 Se tudo deu certo agora você está acessando o terminal da instância Ubuntu 20.04 na AWS.
 
 Para se certificar que está na versão correta digite
 
+```shell
 $ cat /etc/os-release
-
+```
 
 Você deverá ver a seguinte saída no terminal.
 
@@ -84,53 +87,33 @@ Menu Bitbucket
 
 Criando o usuário que será utilizado no dia a dia dentro do servidor
 
+```shell{1-1}
 $ sudo adduser nomedousuario
-
-
-
 Adding user `nomedousuario ...
-
 Adding new group `nomedousuario (1001) ...
-
 Adding new user `nomedousuario (1001) with group `nomedousuario ...
-
 Creating home directory `/home/nomedousuario ...
-
 Copying files from `/etc/skel' ...
-
 New password:
-
 Retype new password:
-
 passwd: password updated successfully
-
 Changing the user information for nomedousuario
-
 Enter the new value, or press ENTER for the default
-
-	Full Name []:
-
-	Room Number []:
-
-	Work Phone []:
-
-	Home Phone []:
-
-	Other []:
-
+Full Name []:
+Room Number []:
+Work Phone []:
+Home Phone []:
+Other []:
 Is the information correct? [Y/n] Y
-
-
+```
 
 Troque o usuário para o que acabou de ser criado
 
+```shell
 $ sudo su nomedousuario
-
 $ cd ~/
-
 $ pwd
-
-
+```
 
 Veja a saída **/home/nomedousuario**
 
@@ -138,75 +121,68 @@ Configurando o acesso SSH para o novo usuário
 
 Crie um novo par de chaves no seu computador local
 
+```shell
 $ ssh-keygen -o -a 100 -t ed25519 -f id_aws -C "nomedousuario"
-
-
+```
 
 Obs. [https://blog.g3rt.nl/upgrade-your-ssh-keys.html](https://blog.g3rt.nl/upgrade-your-ssh-keys.html)
 
 Copie a chave pública para sua área de transferência, ela será adicionada ao servidor para o acesso SSH posteriormente
 
+```shell
 $ cat ~/.ssh/id_aws.pub | pbcopy
-
-
+```
 
 No servidor na AWS, logado como o seu novo usuário crie a pasta .ssh na pasta raíz.
 
+```shell
 $ cd ~
-
-
-
 $ mkdir .ssh
-
-
+```
 
 Agora crie o arquivo authorized_keys e cole a chave pública criada no passo anterior.
 
+```shell
 $ vi ~/.ssh/authorized_keys
-
-
+```
 
 Após executar este processo saia do usuário **nomedousuario** digitando **exit** e em seguida saia do servidor digitando **exit** novamente.
 
 Agora vamos fazer o logon no servidor novamente, mas desta vez com a chave privada criada para o usuário.
 
+```shell
 $ ssh -i ~/.ssh/id_aws -o "IdentitiesOnly=yes" nomedousuario@ec2-X-XXX-XXX-XXX.compute-1.amazonaws.com
-
-
+```
 
 ### Adicionando o usuário ao grupo de administradores.
 
+```shell
 $ usermod -aG admin **nomedousuario**
-
-
+```
 
 ## Instalando o NGINX
 
+```shell
 $ sudo apt update
-
 $ sudo apt install nginx
-
-
+```
 
 Se você acessar o IP público do servidor através do browser a página padrão de boas vindas do NGINX será exibida.
 
 Menu Bitbucket
 
-
 ## Instalando o PHP 7.4
 
+```shell
 $ sudo apt-get install -y php php-cli php-fpm
-
 $ sudo apt-get install -y openssl php-common php-curl php-sqlite3 php-mysql php-json php-mbstring php-xml php-zip
-
-
+```
 
 ## Instalando o composer
 
+```shell
 $ sudo su
-
 $ curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-
+```
 
 Então é isso. Este artigo não cobriu alguns pontos importantes como configurações de segurança e configurações do NGINX para servir sites no servidor. Caso você se interesse por esses assuntos, deixe um comentário para que eu possa aborda-los no futuro

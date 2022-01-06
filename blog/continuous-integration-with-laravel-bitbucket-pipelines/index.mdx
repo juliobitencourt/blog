@@ -1,5 +1,5 @@
 ---
-title: "Continuous Integration with Laravel and Bitbucket Pipelines"
+title: "Tutorial: Continuous Integration with Laravel and Bitbucket Pipelines"
 description: "Work in a more effective way with Continuous Integration. In this tutorial we'll cover CI with Laravel and Bitbucket Pipelines"
 date: "2020-05-19 10:18:23"
 featured: images/thumbnail-continuous-integration-with-laravel-bitbucket-pipelines.png
@@ -23,55 +23,54 @@ To run this tutorial you will need a basic understanding of:
 
 After creating a Bitbucket account, create a new repository. For this tutorial we will call it **laravel-pipeline**.
 
-Bitbucket Menu
+<div class="mx-auto w-6/12 border-solid border-2 border-gray-600">
 
+![Bitbucket menu](images/1-bitbucket-menu.png)
+</div>
 
-New Repository
-
+![Create new repository](images/2-create-new-repository.png)
 
 After creating the repository in bitbucket, clone it in your development environment.
 
+```shell
 $ git clone git@bitbucket.org:your-username/laravel-pipeline.git
-
-
+```
 
 Access the repository folder, add the remote and send the master branch to Bitbucket.
 
+```shell
 $ cd laravel-pipeline
-
 $ git remote add origin git@bitbucket.org:your-username/laravel-pipeline.git
-
 $ git push -u origin master
+```
 
+## Installing Laravel
 
-
-## Installing Laravel - In this tutorial we are using version 7.x
-
-Laravel can be installed in [two ways] (https://laravel.com/docs/7.x#installing-laravel). We will use the installation via Laravel Installer.
+We will use the [Laravel installer](https://laravel.com/docs/8.x) to create a new Laravel application.
 
 Still in the laravel-pipeline folder type.
 
+```shell
 $ laravel new
-
+```
 
 After installing Laravel, run the automated tests that are included in the standard installation.
 
 To do this, just type in the terminal:
 
+```shell
 $ artisan test
+```
 
-
-Artisan Test
-
+![Artisan Test](images/3-artisan-test.png)
 
 Now let's do an initial commit and send the code to the repository on Bitbucket
 
+```shell
 $ git add .
-
 $ git commit -m "Installing Laravel"
-
 $ git push
-
+```
 
 Done! Our code is already in Bitbucket and now we can start to configure the pipeline.
 
@@ -79,13 +78,11 @@ Done! Our code is already in Bitbucket and now we can start to configure the pip
 
 Access the repository settings and then the Pipeline settings.
 
-Pipelines Settings
-
+![Pipelines Settings](images/4-pipelines-settings.png)
 
 Then activate the Pipeline.
 
-Habilitando Pipelines Settings
-
+![Enabling Pipelines Settings](images/5-enabling-pipelines-settings.png)
 
 Notice in the image above that now we need to configure the file **bitbucket-pipelines.yml**
 
@@ -96,7 +93,7 @@ We need to configure two files in Bitbucket: **bitbucket-pipelines.yml** and **.
 ### The file bitbucket-pipelines.yml
 
 Templates
-
+6-language-templates
 
 Bitbucket provides several configuration templates for the most diverse development environments.
 
@@ -106,68 +103,38 @@ In your preferred editor create the file **bitbucket-pipelines.yml** at the root
 
 Bitbucket-pipelines.yml, as the extension already shows, is a [YAML file] (https://yaml.org/). You don't need a lot of experience in this type of file right now as it is very simple to understand.
 
+```yaml
 image: php:7.4-fpm
-
-
-
 pipelines:
-
   default:
-
     - step:
-
         name: Build and test
-
         caches:
-
           - composer
-
         script:
-
           - apt-get update && apt-get install -qy git curl libmcrypt-dev mariadb-client ghostscript
-
           - yes | pecl install mcrypt-1.0.3
-
           - docker-php-ext-install pdo_mysql bcmath exif
-
           - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
           - composer install
-
           - ln -f -s .env.pipelines .env
-
           - php artisan migrate
-
           - ./vendor/bin/phpunit
-
         services:
-
           - mysql
-
           - redis
-
 definitions:
-
   services:
-
     mysql:
-
       image: mysql:5.7
-
       environment:
-
         MYSQL_DATABASE: 'laravel-pipeline'
-
         MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
-
         MYSQL_USER: 'homestead'
-
         MYSQL_PASSWORD: 'secret'
-
     redis:
-
       image: redis
-
+```
 
 ### Understanding the bitbucket-pipelines.yml file
 
@@ -175,8 +142,9 @@ Bitbucket Pipelines uses **Docker containers** to perform the steps. The bitbuck
 
 In the first line of the file we see that we will use a **docker image for PHP 7.4 with PHP-FPM configured**.
 
+```yaml
 image: php:7.4-fpm
-
+```
 
 In our example file we have two main sections: **pipelines** and **definitions**. Let's start with **pipelines**.
 
@@ -200,114 +168,85 @@ I suggest you consult the documentation on the official website.
 First we update the Docker image packages and install the **git, curl, libmcrypt-dev, mariadb-client, ghostscript and mcrypt** packages
 
 - apt-get update && apt-get install -qy git curl libmcrypt-dev mariadb-client ghostscript
-
 - yes | pecl install mcrypt-1.0.3
-
 
 We now use the **docker-php-ext-install** tool to install the **pdo_mysql, bcmath and exif** extensions that are required for this version of Laravel.
 
 - docker-php-ext-install pdo_mysql bcmath exif
 
-
 Then we use **curl** to download composer and install the dependencies of our Laravel project with the command **composer install**
 
 - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
 - composer install
-
 
 And last but not least, we created a symbolic link between **.env.pipelines** and the standard **.env** that will be used by Laravel during the execution of automated tests.
 
 Then we ran the migrations and the test suite.
 
-- ln -f -s .env.pipelines .env
-
-- php artisan migrate
-
-- ./vendor/bin/phpunit
-
+```shell
+ln -f -s .env.pipelines .env
+php artisan migrate
+./vendor/bin/phpunit
+```
 
 ### Defining the services to be installed through Docker containers
 
+```yaml
 definitions:
-
   services:
-
     mysql:
-
       image: mysql:5.7
-
       environment:
-
         MYSQL_DATABASE: 'laravel-pipeline'
-
         MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
-
         MYSQL_USER: 'homestead'
-
         MYSQL_PASSWORD: 'secret'
-
     redis:
-
       image: redis
-
-
+```
 
 With the **bitbucket-pipelines.yml** file configured, all that remains now is to configure an accessory file with the environment variables that will be used by the service during the execution of the steps
 
 ### The file .env.pipelines
 
+```
 APP_ENV=local
-
 APP_KEY=ThisIsThe32CharacterKeySecureKey
-
 APP_DEBUG=true
-
 DB_CONNECTION=mysql
-
 DB_HOST=127.0.0.1
-
 DB_DATABASE=laravel-pipeline
-
 DB_USERNAME=homestead
-
 DB_PASSWORD=secret
-
+```
 
 This file defines the environment variables that will be used specifically for the execution of the pipeline.
 
 Git Status
 
-
+```shell
 $ git add .
-
 $ git commit -m "Configuring Bitbucket Pipelines"
-
 $ git push
-
+```
 
 From the moment the code is sent to the repository, Bitbucket Pipelines will identify this action and start the build process.
 
 When accessing the Pipelines menu you will see that the pipeline is being executed for the commit that we created earlier. In this case, "Configuring Bitbucket Pipelines".
 
-Menu Pipelines
+![Menu Pipelines](images/8-pipelines-menu.png)
 
-
-Pipelines Screen
-
+![Pipelines Screen](images/9-pipelines-screen.png)
 
 Click on the pipeline status and you will see the screen with all the steps being performed.
 
 Menu Pipelines
 
-
 If everything went well, the build will be green
 
-Build successfully
+![Build successfully](images/10-build-successful.png)
 
-
-Pipelines Screen
-
+![Pipelines Screen](images/11-pipelines-screen.png)
 
 ## Now how about inserting an error in our code and sending it to the repository?
 
@@ -315,27 +254,23 @@ Let's force an error in our automated test.
 
 Open the ExampleTest.php file located in the tests / Unit directory and change line 16 as shown below.
 
+```php
 $this->assertTrue(false);
-
+```
 
 Now commit and upload to the repository.
 
+```shell
 $ git add .
-
 $ git commit -m "My amazing functionality"
-
 $ git push
-
+```
 
 After a few moments the pipeline will be executed automatically and when running the test suite it will fail.
 
-Build failed
+![Build failed](images/12-build-failed.png)
 
-
-Check out the PHP Unit output.
-
-Build falha
-
+![Check out the PHP Unit output](images/13-build-failed-phpunit.png)
 
 ## Conclusion
 
