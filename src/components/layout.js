@@ -19,6 +19,7 @@ const Layout = ({ pageTitle, children }) => {
       <Helmet>
         <meta charSet="utf-8" />
         <title>{pageTitle} | {data.site.siteMetadata.title}</title>
+        <meta name="google-site-verification" content="mLxbzMz7rJHe_1Zvo8kAqXCNOKDicaLld6lEfujAIGY" />
       </Helmet>
       <div className="container mx-auto max-w-6xl p-6">
         <header className="sticky top-0 bg-white z-10">
