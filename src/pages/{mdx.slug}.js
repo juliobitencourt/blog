@@ -21,7 +21,7 @@ const BlogPost = ({ data }) => {
         image={image}
       />
       <article>
-        <p>{data.mdx.frontmatter.date}</p>
+        <p class="dark:text-gray-400">{data.mdx.frontmatter.date}</p>
         <ShareButtons></ShareButtons>
         <MDXRenderer>
           {data.mdx.body}

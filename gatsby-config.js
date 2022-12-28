@@ -64,8 +64,6 @@ module.exports = {
         ],
       },
     },
-    "gatsby-plugin-sharp",
-    "gatsby-transformer-sharp",
     {
       resolve: "gatsby-source-filesystem",
       options: {
@@ -74,5 +72,7 @@ module.exports = {
         ignore: [`**/\.*`], // ignore files starting with a dot
       },
     },
+    "gatsby-plugin-sharp",
+    "gatsby-transformer-sharp",
   ],
 };

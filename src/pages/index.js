@@ -9,17 +9,17 @@ const IndexPage = ({ data }) => {
     <Layout pageTitle="Hi I'm Julio Bitencourt, web developer from Brazil">
       <SEO title={data.site.siteMetadata.title} />
       <div className="max-w-prose mx-auto mt-12">
-        <h2 className="text-2xl font-bold text-indigo-700">My Writings</h2>
+        <h2 className="text-2xl font-bold dark:text-gray-100 text-indigo-700">My Writings</h2>
       </div>
       {
         data.allMdx.nodes.map(node => (
           <article key={node.id}>
-            <h2>
+            <h2 class="dark:text-gray-100 dark:hover:text-indigo-400 ">
               <Link to={`/${node.slug}`}>
                 {node.frontmatter.title}
               </Link>
             </h2>
-            <p>Posted: {node.frontmatter.date}</p>
+            <p class="dark:text-gray-400">Posted: {node.frontmatter.date}</p>
           </article>
         ))
       }
