@@ -1,0 +1,109 @@
+---
+title: "How to test your websites with Cypress?"
+description: "Write end-to-end tests in plain JavaScript and run it in the Browser, Electron and CI as it was a real user"
+date: "2023-01-11 12:00:00"
+featured: images/thumbnail-how-to-test-your-websites-with-cypress.jpg
+---
+
+[Cypress.io](https://www.cypress.io/) is an all-in-one end-to-end testing tool.
+With Cypress you write your tests in plain JavaScript and it will run it in the browser (and even in Electron) as it was a real user.
+
+Debug your code visually and run your tests in your [continuous integration builds](/continuous-integration-with-laravel-bitbucket-pipelines).
+
+Let's use Cypress to test a simple Ajax form.
+
+First. Install it via npm...
+```shell
+npm install cypress --save-dev
+```
+... or yarn
+```shell
+yarn add cypress --dev
+```
+
+Then open it
+
+```shell
+npx cypress open
+```
+
+If you're not using npm or yarn you can just download the app
+
+## Let's write the first test using Cypress.js
+
+Create a file called **my_test.cy.js**
+
+Tests in Cypress are called "Specs"
+
+And dont forget to turn Intellisense on. Add the line bellow to the beginning of your spec file.
+
+```javascript
+/// <reference types="cypress" />
+```
+
+First. Visit a page and assert it has some value:
+
+```javascript
+it('Fills the customer form', () => {
+    cy.visit('http://my-awesome-website.test/')
+    cy.contains('My Awesome Form')
+});
+```
+
+Pretty simple. It's like jQuery but for your tests.
+
+Type in some fields and submit a form? Piece of cake
+
+```javascript
+it('Fills the customer form', () => {
+    cy.visit('http://my-awesome-website.test/')
+    cy.contains('My Awesome Form')
+    cy.get('input[name=name]').type('Julio Bitencourt')
+    cy.get('input[name=website]').type('juliobitencourt.dev')
+    cy.get('#submit-button').click()
+});
+```
+
+## Catch ajax requests and check the responses with Cypress
+
+```javascript
+it('Fills the customer form', () => {
+    cy.visit('http://my-awesome-website.test/')
+    cy.contains('My Awesome Form')
+    cy.get('input[name=name]').type('Julio Bitencourt')
+    cy.get('input[name=website]').type('juliobitencourt.dev')
+
+    cy.intercept('http://my-awesome-website.test/submit-form.php').as('submitForm')
+    cy.get('form').submit()
+    cy.wait('@submitForm').its('response.statusCode').should('eq', 201)
+
+    cy.get('h1').should('contain', 'Customer successfully created!')
+});
+```
+
+## Resize the viewport and take screenshots with Cypress
+
+```javascript
+  it('Take some screenshots', () => {
+    cy.viewport(550, 750) // Set viewport to 550px x 750px
+    cy.visit('http://my-awesome-website.test/')
+    cy.contains('Show Modal').click()
+    cy.get("#modal").should('be.visible')
+    cy.screenshot()
+
+    cy.get('#modal button').click()
+    cy.wait(1000) // wait the end of the transition
+    cy.get("#modal").should('not.be.visible')
+    cy.screenshot()
+  })
+});
+```
+
+It is important to note something:
+E2E testing is only one of several types of automated testing aproaches but it's the best one for beginners IMHO.
+
+Start with the basics and go further with this great tool!
+
+I hope you enjoyed this post. If you do so, please consider following me for more tips!
+
+Thank you!

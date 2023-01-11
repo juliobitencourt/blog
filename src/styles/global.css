@@ -2,8 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+.dark body {
+  @apply bg-gray-800;
+}
+
 article {
-    @apply max-w-prose mx-auto
+    @apply max-w-prose mx-auto;
 }
 
 h1 {
