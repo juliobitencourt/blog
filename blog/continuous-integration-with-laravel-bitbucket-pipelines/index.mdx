@@ -1,6 +1,6 @@
 ---
-title: "Tutorial: Continuous Integration with Laravel and Bitbucket Pipelines"
-description: "Work in a more effective way with Continuous Integration. In this tutorial we'll cover CI with Laravel and Bitbucket Pipelines"
+title: "Tutorial: Laravel Continuous Integration with Bitbucket Pipelines"
+description: "Work in a more effective way with Laravel Continuous Integration. In this tutorial we'll cover Bitbucket CI Pipelines"
 date: "2020-05-19 10:18:23"
 featured: images/thumbnail-continuous-integration-with-laravel-bitbucket-pipelines.png
 tags: ["laravel", "ci/cd", "bitbucket"]
@@ -8,11 +8,11 @@ tags: ["laravel", "ci/cd", "bitbucket"]
 
 Continuous integration is a widespread practice in the software development industry.
 
-And today you will learn a way to do **continuous integration in Laravel projects** with Bitbucket Pipelines.
+And today you will learn a way to do **Laravel continuous integration ** with **Bitbucket continuous integration pipelines**.
 
-Bitbucket Pipelines is the tool for integration and continuous deployment of the Git Bitbucket cloud platform.
+Bitbucket continuous integration pipelines is the tool for integration and continuous deployment of the Git Bitbucket cloud platform.
 
-In the free plan of the tool you have 50 minutes of build, which is the time spent to execute the continuous integration processes. That is, you can start using this very useful tool right now.
+In the free plan of the tool you have 50 minutes of build, which is the time spent to execute the Bitbucket CI processes. That is, you can start using this very useful tool right now.
 
 To run this tutorial you will need a basic understanding of:
 
@@ -20,7 +20,7 @@ To run this tutorial you will need a basic understanding of:
 - Terminal (Linux, Windows or Mac)
 - Laravel
 
-## So let's see how to do continuous integration with Laravel
+## So let's see how to do Laravel continuous integration
 
 After creating a Bitbucket account, create a new repository. For this tutorial we will call it **laravel-pipeline**.
 
@@ -73,9 +73,9 @@ $ git commit -m "Installing Laravel"
 $ git push
 ```
 
-Done! Our code is already in Bitbucket and now we can start to configure the pipeline.
+Done! Our code is already in Bitbucket and now we can start to configure the Bitbucket CI Pipeline.
 
-## Configuring the repository for continuous integration in Bitbucket Pipelines
+## Configuring the repository for Laravel continuous integration in Bitbucket Pipelines
 
 Access the repository settings and then the Pipeline settings.
 
@@ -87,7 +87,7 @@ Then activate the Pipeline.
 
 Notice in the image above that now we need to configure the file **bitbucket-pipelines.yml**
 
-## Bitbucket Pipelines configuration files
+## Bitbucket CI Pipelines configuration files
 
 We need to configure two files in Bitbucket: **bitbucket-pipelines.yml** and **.env.pipelines**.
 
@@ -139,7 +139,7 @@ definitions:
 
 ### Understanding the bitbucket-pipelines.yml file
 
-Bitbucket Pipelines uses **Docker containers** to perform the steps. The bitbucket-pipelines.yml file is the main configuration file for this automated flow.
+**Bitbucket CI CD Pipelines** uses **Docker containers** to perform the steps. The bitbucket-pipelines.yml file is the main configuration file for this automated flow.
 
 In the first line of the file we see that we will use a **docker image for PHP 7.4 with PHP-FPM configured**.
 
@@ -149,7 +149,7 @@ image: php:7.4-fpm
 
 In our example file we have two main sections: **pipelines** and **definitions**. Let's start with **pipelines**.
 
-This section defines which pipelines are defined for this repository. **default** will be performed for all branches.
+This section defines which Bitbucket CI pipelines are defined for this repository. **default** will be performed for all branches.
 
 Each **- step** is an isolated step in the flow. The steps can exchange _state_ with each other, but this configuration is out of scope in this tutorial.
 
@@ -160,7 +160,7 @@ In the step we define: **name, caches, script and services**.
 - **scripts** - is where the magic happens. I will explain further below
 - **services** - are the services needed to use the pipeline. In this case MySQL and Redis. The services will be explained later in this tutorial
 
-Remembering that this is a basic configuration and it is possible to do much more with Bitbucket Pipelines. Including automatic deployment, as we will see in a future file.
+Remembering that this is a basic configuration and it is possible to do much more with **Bitbucket pipelines definitions**. Including automatic deployment, as we will see in a future file.
 
 I suggest you consult the documentation on the official website.
 
@@ -221,7 +221,7 @@ DB_USERNAME=homestead
 DB_PASSWORD=secret
 ```
 
-This file defines the environment variables that will be used specifically for the execution of the pipeline.
+This file defines the environment variables that will be used specifically for the execution of the Bitbucket pipeline.
 
 Git Status
 
@@ -249,7 +249,7 @@ If everything went well, the build will be green
 
 ![Pipelines Screen](images/11-pipelines-screen.png)
 
-## Now how about inserting an error in our code and sending it to the repository?
+## Now, how about inserting an error in our code and sending it to the repository?
 
 Let's force an error in our automated test.
 
@@ -273,8 +273,8 @@ After a few moments the pipeline will be executed automatically and when running
 
 ![Check out the PHP Unit output](images/13-build-failed-phpunit.png)
 
-## Conclusion
+## Conclusion about our laravel continuous integration
 
 In this article we saw that with a little initial setup we can save a lot of time in locating and correcting errors in the future.
 
-If you encountered any problems or have any suggestions please leave a comment and if possible share this article with your devs friends!
+Feel free to use the examples and explore another Laravel bitbucket pipelines
